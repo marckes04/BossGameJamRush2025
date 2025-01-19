@@ -55,12 +55,7 @@ public class PlayerMove : MonoBehaviour
     {
         Vector2 input = move.ReadValue<Vector2>();
 
-        // Check for snap input (e.g., a button press)
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SnapTo(new Vector3(0, 0, 0), Quaternion.Euler(0, 90, 0));
-            return; // Skip further updates for this frame
-        }
+       
 
         // Normal movement logic
         forceDirection += input.x * GetCameraRight(playerCamera) * movementForce;
