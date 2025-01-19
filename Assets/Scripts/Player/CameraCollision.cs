@@ -1,40 +1,40 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraCollision : MonoBehaviour
 {
-    [SerializeField]
-    private Transform player; // El jugador que la cámara sigue.
+    private float minDistance = 1.5f;
+    private float maxDistance = 5f;
 
-    [SerializeField]
-    private LayerMask collisionLayers; // Capas con las que la cámara puede colisionar.
+    private float offset = 10;
 
-    [SerializeField]
-    private float minDistance = 0.5f; // Distancia mínima de la cámara al jugador.
+    private float distance;
 
-    [SerializeField]
-    private float maxDistance = 5f; // Distancia máxima de la cámara al jugador.
 
-    [SerializeField]
-    private float smoothSpeed = 10f; // Velocidad de interpolación.
+    Vector3 direction;
 
-    private Vector3 desiredPosition;
-    private Vector3 smoothVelocity;
-
-    void LateUpdate()
+    void Start()
     {
-        // Determinar la posición deseada de la cámara
-        desiredPosition = player.position - transform.forward * maxDistance;
+        direction = transform.localPosition.normalized;
+        distance = transform.localPosition.magnitude;
+    }
 
-        // Realizar un raycast desde el jugador hacia la posición deseada de la cámara
-        if (Physics.Raycast(player.position, -transform.forward, out RaycastHit hit, maxDistance, collisionLayers))
+    void Update()
+    {
+        Vector3 camPos = transform.parent.TransformPoint(direction * maxDistance);
+        RaycastHit hit;
+
+        if (Physics.Linecast(transform.parent.position, camPos, out hit))
         {
-            // Si hay colisión, ajustar la posición deseada a la posición del impacto
-            desiredPosition = player.position - transform.forward * (hit.distance - minDistance);
+            distance = Mathf.Clamp(hit.distance * 0.85f, minDistance, maxDistance);
         }
 
-        // Suavizar la posición de la cámara
-        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref smoothVelocity, smoothSpeed * Time.deltaTime);
+        else
+        {
+            distance = maxDistance;
+        }
+        transform.localPosition = Vector3.Lerp(transform.localPosition, direction* distance, offset * Time.deltaTime);
     }
 }
