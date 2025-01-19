@@ -37,15 +37,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""92f8dcec-a111-4829-ac39-6eb58e49676f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""f4a0721f-2102-4afe-92af-d4abb80270d5"",
@@ -177,17 +168,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""94703233-a271-4858-ae4a-4333e39cecad"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""e5448526-b135-4219-808a-0b336012cfa4"",
                     ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
@@ -216,7 +196,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         // PlayerControls
         m_PlayerControls = asset.FindActionMap("PlayerControls", throwIfNotFound: true);
         m_PlayerControls_Move = m_PlayerControls.FindAction("Move", throwIfNotFound: true);
-        m_PlayerControls_Jump = m_PlayerControls.FindAction("Jump", throwIfNotFound: true);
         m_PlayerControls_Attack = m_PlayerControls.FindAction("Attack", throwIfNotFound: true);
         m_PlayerControls_Run = m_PlayerControls.FindAction("Run", throwIfNotFound: true);
     }
@@ -281,7 +260,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerControls;
     private List<IPlayerControlsActions> m_PlayerControlsActionsCallbackInterfaces = new List<IPlayerControlsActions>();
     private readonly InputAction m_PlayerControls_Move;
-    private readonly InputAction m_PlayerControls_Jump;
     private readonly InputAction m_PlayerControls_Attack;
     private readonly InputAction m_PlayerControls_Run;
     public struct PlayerControlsActions
@@ -289,7 +267,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
         private @PlayerController m_Wrapper;
         public PlayerControlsActions(@PlayerController wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_PlayerControls_Move;
-        public InputAction @Jump => m_Wrapper.m_PlayerControls_Jump;
         public InputAction @Attack => m_Wrapper.m_PlayerControls_Attack;
         public InputAction @Run => m_Wrapper.m_PlayerControls_Run;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
@@ -304,9 +281,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
@@ -320,9 +294,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
             @Attack.canceled -= instance.OnAttack;
@@ -349,7 +320,6 @@ public partial class @PlayerController: IInputActionCollection2, IDisposable
     public interface IPlayerControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
     }

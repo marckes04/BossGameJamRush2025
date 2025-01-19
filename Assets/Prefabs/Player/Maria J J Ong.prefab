@@ -359,6 +359,7 @@ GameObject:
   - component: {fileID: 7535632551729687234}
   - component: {fileID: 7285524646938846696}
   - component: {fileID: 8304315705334148636}
+  - component: {fileID: 404764456832831782}
   m_Layer: 0
   m_Name: Maria J J Ong
   m_TagString: Untagged
@@ -454,6 +455,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &404764456832831782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563066400304435616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e3e1970ccc6aa34ebd4b260cbef95e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCamera: {fileID: 0}
+  movementForce: 1
+  maxSpeed: 5
 --- !u!1 &719590031603970327
 GameObject:
   m_ObjectHideFlags: 0
