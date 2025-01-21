@@ -7,8 +7,9 @@ public class PlayerMove : MonoBehaviour
 {
     private PlayerController playerAsset;
     private InputAction move;
+    private InputAction run;
 
-    private Vector3 forceDirection; 
+    private Vector3 forceDirection;
 
     private Rigidbody rb;
 
@@ -21,8 +22,11 @@ public class PlayerMove : MonoBehaviour
     [SerializeField]
     private float maxSpeed = 5f;
 
-    private Animator animator;
+    [SerializeField]
+    private float runMultiplier = 2f;
 
+
+    private Animator animator;
 
     private void Awake()
     {
@@ -32,7 +36,7 @@ public class PlayerMove : MonoBehaviour
             Debug.LogError("Rigidbody component is missing.");
         }
         playerAsset = new PlayerController();
-  
+
         animator = GetComponent<Animator>();
         if (animator == null)
         {
@@ -40,45 +44,48 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    void OnEnable()
+    
+
+    private void OnEnable()
     {
-       move =  playerAsset.PlayerControls.Move;
-       playerAsset.PlayerControls.Enable();
+        move = playerAsset.PlayerControls.Move;
+        run = playerAsset.PlayerControls.Run; // Asigna la acción de correr del Input System
+        playerAsset.PlayerControls.Enable();
     }
 
-    void OnDisable()
-    {
-        playerAsset.PlayerControls.Disable();
-    }
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Vector2 input = move.ReadValue<Vector2>();
 
-       
+        // Verifica si el jugador está corriendo
+        bool isRunning = run.IsPressed();
 
-        // Normal movement logic
-        forceDirection += input.x * GetCameraRight(playerCamera) * movementForce;
-        forceDirection += input.y * GetCameraForward(playerCamera) * movementForce;
+        // Calcula la dirección de movimiento basada en la cámara
+        float currentMovementForce = isRunning ? movementForce * 2f : movementForce; // Duplica la fuerza si corre
+        forceDirection += input.x * GetCameraRight(playerCamera) * currentMovementForce;
+        forceDirection += input.y * GetCameraForward(playerCamera) * currentMovementForce;
 
+        // Agrega fuerza al Rigidbody
         rb.AddForce(forceDirection, ForceMode.Impulse);
         forceDirection = Vector3.zero;
 
+        // Limita la velocidad horizontal
+        float currentMaxSpeed = isRunning ? maxSpeed * 2f : maxSpeed; // Duplica la velocidad máxima si corre
         Vector3 horizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-        if (horizontalVelocity.sqrMagnitude > maxSpeed * maxSpeed)
+        if (horizontalVelocity.sqrMagnitude > currentMaxSpeed * currentMaxSpeed)
         {
-            rb.velocity = horizontalVelocity.normalized * maxSpeed + Vector3.up * rb.velocity.y;
+            rb.velocity = horizontalVelocity.normalized * currentMaxSpeed + Vector3.up * rb.velocity.y;
         }
 
-        UpdateAnimations(horizontalVelocity);
+        // Actualiza las animaciones y la rotación
+        UpdateAnimations(input, isRunning);
         LookAt();
     }
 
-
-    private void UpdateAnimations(Vector3 horizontalVelocity)
+    private void UpdateAnimations(Vector2 input, bool isRunning)
     {
-        // Calcula la velocidad horizontal
-        float speed = horizontalVelocity.magnitude;
+        // Calcula la velocidad según el estado de movimiento
+        float speed = (input.sqrMagnitude > 0.1f) ? (isRunning ? 1f : 0.5f) : 0f;
 
         // Actualiza el parámetro 'Speed' en el Animator
         if (animator != null)
@@ -86,7 +93,6 @@ public class PlayerMove : MonoBehaviour
             animator.SetFloat("Speed", speed);
         }
     }
-
 
     private void LookAt()
     {
@@ -121,21 +127,14 @@ public class PlayerMove : MonoBehaviour
     // Method to snap the player's body to a specific position and/or rotation
     public void SnapTo(Vector3 targetPosition, Quaternion targetRotation)
     {
-        // Snap the Rigidbody's position
         rb.position = targetPosition;
-
-        // Snap the Rigidbody's rotation
         rb.rotation = targetRotation;
-
-        // Optionally reset velocity to ensure no unintended movement
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        // Update the animator if needed
         if (animator != null)
         {
-            animator.SetFloat("Speed", 0); // Stop animation since we're snapping to idle
+            animator.SetFloat("Speed", 0);
         }
     }
-
 }
