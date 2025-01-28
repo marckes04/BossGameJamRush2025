@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerMove : MonoBehaviour
 {
     private PlayerController playerAsset;
+  
     private InputAction move;
     private InputAction run;
 
@@ -22,11 +23,11 @@ public class PlayerMove : MonoBehaviour
     [SerializeField]
     private float maxSpeed = 5f;
 
+
     [SerializeField]
-    private float runMultiplier = 2f;
+    private PlayerAudio playerAudio;
 
-
-    private Animator animator;
+    private characterAnimations playerAnimations;
 
     private void Awake()
     {
@@ -37,11 +38,7 @@ public class PlayerMove : MonoBehaviour
         }
         playerAsset = new PlayerController();
 
-        animator = GetComponent<Animator>();
-        if (animator == null)
-        {
-            Debug.LogWarning("Animator component is missing.");
-        }
+        playerAnimations = GetComponentInChildren<characterAnimations>();
     }
 
     
@@ -84,15 +81,23 @@ public class PlayerMove : MonoBehaviour
 
     private void UpdateAnimations(Vector2 input, bool isRunning)
     {
-        // Calcula la velocidad según el estado de movimiento
         float speed = (input.sqrMagnitude > 0.1f) ? (isRunning ? 1f : 0.5f) : 0f;
 
-        // Actualiza el parámetro 'Speed' en el Animator
-        if (animator != null)
+        if (playerAnimations != null)
         {
-            animator.SetFloat("Speed", speed);
+            playerAnimations.move(speed); // Correct method call
+        }
+
+        if (speed > 0)
+        {
+            playerAudio.PlayFootstepSound(isRunning);
+        }
+        else
+        {
+            playerAudio.StopFootstepSound();
         }
     }
+
 
     private void LookAt()
     {
@@ -132,9 +137,10 @@ public class PlayerMove : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        if (animator != null)
+        if (playerAnimations != null)
         {
-            animator.SetFloat("Speed", 0);
+            playerAnimations.move(0); // Use the PlayerAnimations method
         }
     }
+
 }
