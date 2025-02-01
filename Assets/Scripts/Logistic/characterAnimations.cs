@@ -30,20 +30,4 @@ public class characterAnimations : MonoBehaviour
     {
         anim.SetTrigger("Attack3");
     }
-
-    public void Walk(bool walk)
-    {
-        anim.SetBool("Walk", walk);
-    }
-
-    public void Run(bool run)
-    {
-        anim.SetBool("Run", run);
-    }
-
-    public void StopAnimation()
-    {
-        anim.StopPlayback();
-    }
-
 }
