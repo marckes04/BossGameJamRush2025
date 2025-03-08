@@ -1568,7 +1568,6 @@ GameObject:
   - component: {fileID: 1651851550453942290}
   - component: {fileID: 5898135287445192291}
   - component: {fileID: 8599990373341572461}
-  - component: {fileID: 8445283748214362583}
   - component: {fileID: 7738569300544814994}
   m_Layer: 0
   m_Name: Paladin
@@ -1643,7 +1642,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &5898135287445192291
 CapsuleCollider:
@@ -1690,18 +1689,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &8445283748214362583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5548335886708496440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f96096a2bf7be914cb98f22940be3fba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7738569300544814994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1716,6 +1703,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3.5
   runSpeed: 5
+  chaseDistance: 10
+  attackDistance: 0.5
+  chasePlayerAfterAttackDistance: 1
 --- !u!1 &5795606591142157248
 GameObject:
   m_ObjectHideFlags: 0

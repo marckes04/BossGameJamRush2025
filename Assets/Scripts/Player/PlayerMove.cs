@@ -24,9 +24,7 @@ public class PlayerMove : MonoBehaviour
     private float maxSpeed = 5f;
 
 
-    [SerializeField]
-    private PlayerAudio playerAudio;
-
+   
     private characterAnimations playerAnimations;
 
     private void Awake()
@@ -88,14 +86,6 @@ public class PlayerMove : MonoBehaviour
             playerAnimations.move(speed); // Correct method call
         }
 
-        if (speed > 0)
-        {
-            playerAudio.PlayFootstepSound(isRunning);
-        }
-        else
-        {
-            playerAudio.StopFootstepSound();
-        }
     }
 
 
