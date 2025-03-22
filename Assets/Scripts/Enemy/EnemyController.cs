@@ -208,4 +208,10 @@ public class EnemyController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void SetInitialState(EnemyState initialState)
+    {
+        enemyState = initialState;
+    }
+
+
 }

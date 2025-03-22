@@ -1,38 +1,33 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyGenerator : MonoBehaviour
 {
-
     [SerializeField]
-    private GameObject EnemySpawner;
+    private GameObject enemySpawnerObject; // Assign EnemySpawner GameObject
     [SerializeField]
     private GameObject door;
 
-
     private void Start()
     {
-        EnemySpawner.SetActive(false);
+        enemySpawnerObject.SetActive(false);
     }
-
 
     void OnTriggerEnter(Collider collision)
     {
-      if(collision.CompareTag("Player"))
+        if (collision.CompareTag("Player"))
         {
-           EnemySpawner.SetActive(true);
-            StartCoroutine(DisappearDetector());
+            enemySpawnerObject.SetActive(true);
+            //StartCoroutine(DisappearDetector());
             door.SetActive(true);
         }
     }
 
-    IEnumerator DisappearDetector()
-    {
-        Destroy(gameObject);
-        yield return 3f;
-       
-    }
-
-
+    //IEnumerator DisappearDetector()
+    //{
+    //    yield return new WaitForSeconds(1f); // Small delay before spawning
+    //    EnemySpawn.instance.SpawnEnemies();
+    //    yield return new WaitForSeconds(3f); // Wait for enemies to disappear
+    //}
 }
+
